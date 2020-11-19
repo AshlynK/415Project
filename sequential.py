@@ -50,6 +50,33 @@ def find_airline_traffic():
 #                    new_dict[row1["City"]] = 1 
 #    keymax = max(new_dict, key=new_dict.get)
 #    print("City with most traffic:", keymax)
+##################################################################find_airline_traffic alternate##################################################################
+#Accepts a ranking parameter and ranks the most popular airports by name and flights in + flights out
+
+
+def get_popular_airports():
+    
+    amount = input("How many airports would you like to see ranked: ")
+    dict1 = routes_df["Dest Airport"].value_counts()
+    dest = dict1.to_dict()
+    dict2 = routes_df["Source Airport"].value_counts()
+    source = dict2.to_dict()
+    final_dictionary =  {x: dest.get(x, 0) + source.get(x, 0) 
+                for x in set(dest).union(source)} 
+    final_dictionary = sorted(final_dictionary.items(), key=lambda x: x[1], reverse=True)
+    print("Top", amount, "airport(s) ranked by flights offered in and out \n")
+    traffic = final_dictionary[0:int(amount)]
+    new_list = list()
+    for element in traffic:
+        for index, row in airport_df.iterrows():
+            if element[0] == row[3]:
+                new_list.append(row[0])
+            
+    for item, element in zip(new_list, traffic):
+        print(item, ":", element[1])
+
+#Function Call
+get_popular_airports()
     
     
 #if statement to control main menu based on our sample projects, so far this only contains sections 
