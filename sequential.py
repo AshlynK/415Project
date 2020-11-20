@@ -35,21 +35,7 @@ def find_airports_by_country():
         if row["Country"] == area:
             print(row["Name"], "in", row["City"])
        
-## Function that finds the city with most airline traffic
-def find_airline_traffic():
-    new_dict = {}
-    for index1, row1 in airport_df.iterrows():
-        for index2, row2 in routes_df.iterrows():
-            print("Source airport ID:",row2["Source Airport ID"])
-            print("airport ID:",row1["ID"])
-            print("Dest Airport Id:", row2["Dest Airport ID"])
-#            if str(row2["Source Airport ID"]) == str(row1["ID"]) or str(row2["Dest Airport ID"]) == str(row1["ID"]):
-#                if row1["City"] in new_dict:
-#                    new_dict[row1["City"]] += 1
-#                else:
-#                    new_dict[row1["City"]] = 1 
-#    keymax = max(new_dict, key=new_dict.get)
-#    print("City with most traffic:", keymax)
+
 ##################################################################find_airline_traffic alternate##################################################################
 #Accepts a ranking parameter and ranks the most popular airports by name and flights in + flights out
 
@@ -75,16 +61,21 @@ def get_popular_airports():
     for item, element in zip(new_list, traffic):
         print(item, ":", element[1])
 
-#Function Call
-get_popular_airports()
-    
+# Function that asks for an airport and gives out info about that airport
+def find_an_airport():
+    airport = input("Please type in an airport name: ")
+    airport = airport.lower() + " airport"
+    for index, row in airport_df.iterrows():
+        if row["Name"].lower() == airport:
+            print(row["Name"],"\nLocation:",row["City"],",", row["Country"],"\nIATA:",row["IATA"],"\nLatitude:",row["Lat"],"\nLongitude:",row["Long"],"\nTimezone:",row["Timezone"])
+            
     
 #if statement to control main menu based on our sample projects, so far this only contains sections 
 #from airline/airport facts from option variable above. The only thing needed from section airline/airport facts 
 #is city with most airline traffic (option1 == 3)
-
+#option 4 shows airport facts
 if option == '1':
-    option1 = input("Please Select From Option Below \n 1) View Airports in Your Country/City \n 2) Countries with Highest Number of Airports \n 3) Cities with Most Airline Traffic \n")
+    option1 = input("Please Select From Option Below \n 1) View Airports in Your Country/City \n 2) Countries with Highest Number of Airports \n 3) Cities with Most Airline Traffic \n 4) Airport Facts\n")
     if option1 == '1':
         find_airports_by_country()
     if option1 == '2':
@@ -92,7 +83,10 @@ if option == '1':
         frequency = airport_df["Country"].value_counts()
         print(frequency[0:int(ranking)])
     if option1 == '3':
-        find_airline_traffic()
+        get_popular_airports()
+    if option1 == '4':
+        find_an_airport()
+        
 # Still needing an option == 2, which would be the trip recommendations section, coming soon. 
 
 # Option == 3 means exit the program 
