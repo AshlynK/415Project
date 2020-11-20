@@ -69,7 +69,53 @@ def find_an_airport():
         if row["Name"].lower() == airport:
             print(row["Name"],"\nLocation:",row["City"],",", row["Country"],"\nIATA:",row["IATA"],"\nLatitude:",row["Lat"],"\nLongitude:",row["Long"],"\nTimezone:",row["Timezone"])
             
-    
+            
+#Function that finds flights based on departure and arrival city inputs by user. Outputs Departure airport, to arrival airport, on airlines, with X stops.             
+def find_flights():
+    #Accepting Input
+    depart = input("Please enter a departure city: ")
+    arrive = input("Please enter an arriving city: ")
+    print("Here are a list of flights from", depart, "to", arrive)
+    #defining empty lists to store values for later
+    depart_codes = list()
+    arrive_codes = list()
+    source = list()
+    dest = list()
+    airline = list()
+    stops = list()
+    #FInding the arrival and destination airports
+    for index, row in airport_df.iterrows():
+        if depart == row["City"]:
+            depart_codes.append(row["IATA"])
+        if arrive == row["City"]:
+            arrive_codes.append(row["IATA"])
+    for element, item in zip(depart_codes, arrive_codes):
+        for index, row in routes_df.iterrows():
+            if element == row["Source Airport"] and item == row["Dest Airport"]:
+                source.append(row["Source Airport"])
+                dest.append(row["Dest Airport"])
+                airline.append(row["Airline"])
+                stops.append(row["Stops"])
+    #finding airline
+    names = list()
+    for element in airline:
+        for index, row in airline_df.iterrows():
+            if element == row["IATA"]:
+                names.append(row["Airline Name"])
+    dest1 = list()
+    source1 = list()
+    #updating source and destination with actual airport names 
+    for element1, element2 in zip(source, dest):
+        for index, row in airport_df.iterrows():
+            if element1 == row["IATA"]:
+                source1.append(row["Name"])
+            if element2 == row["IATA"]:
+                dest1.append(row["Name"])
+    for item1, item2, item3, item4, in zip(source1, dest1, names, stops):
+        print("Flight from", item1, "to", item2, "on", item3, "with", item4, "stops")
+
+
+
 #if statement to control main menu based on our sample projects, so far this only contains sections 
 #from airline/airport facts from option variable above. The only thing needed from section airline/airport facts 
 #is city with most airline traffic (option1 == 3)
@@ -88,6 +134,8 @@ if option == '1':
         find_an_airport()
         
 # Still needing an option == 2, which would be the trip recommendations section, coming soon. 
+if option == '2':
+    find_flights()
 
 # Option == 3 means exit the program 
 if option == '3':
