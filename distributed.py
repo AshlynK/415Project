@@ -3,6 +3,12 @@ from pyspark.sql.session import SparkSession
 
 from pyspark.sql import SQLContext
 from pyspark import SparkFiles
+from pyspark.sql.functions import concat, col, lit
+from pyspark.sql.functions import monotonically_increasing_id, row_number
+from pyspark.sql import Window
+from pyspark.sql.functions import col
+import pyspark.sql.functions as F
+
 #reading in/adjusting the 3 data frames from github
 
 #Here is how I read in the files, its a bit tedious but not too bad. Hopefully this works for you two as well. 
@@ -93,4 +99,29 @@ def find_flight():
 
     
 find_flight()
-##################################################################################################################################################################
+###################################################################find_popular_airports####################################################################################
+
+
+def find_popular_airports():
+    amount = input("How many airports would you like to see ranked: ")
+    df3 = df2.groupBy('Source Airport').count()
+    a = df3.sort(col('count').desc())
+    df4 = df2.groupBy('Dest Airport').count()
+    departures = df4.sort(col('count').desc())
+    departures = list(departures.select('count').toPandas()['count'])
+    b = sqlContext.createDataFrame([(l,) for l in departures], ['Departures'])
+    a = a.withColumn("row_idx", row_number().over(Window.orderBy(monotonically_increasing_id())))
+    b = b.withColumn("row_idx", row_number().over(Window.orderBy(monotonically_increasing_id())))
+    final_df = a.join(b, a.row_idx == b.row_idx).\
+             drop("row_idx")
+    df1=final_df.withColumn("sum", col("count")+col("Departures"))
+
+    cities = list(df1.select('Source Airport').toPandas()['Source Airport'])
+    flights = list(df1.select('sum').toPandas()['sum'])
+    
+    cities = cities[0:int(amount)]
+    flights = flights[0:int(amount)]
+    print("Most Popular Airports by Flight: ")
+    for i, j in zip(cities, flights):
+        print(i,":",j)
+    ##############################################################################################################################################################
