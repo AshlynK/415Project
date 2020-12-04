@@ -145,3 +145,37 @@ def print_info():
         print("\nTimezone:", timezone[x])
         print("\nLatitude:", lat[x])
         print("\nLongitude:", long[x])
+        
+        
+       
+################################################### Country and airport code#######################
+from pyspark.sql import SQLContext
+from pyspark import SparkFiles
+from pyspark import SparkContext
+sc =SparkContext()
+url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat"
+sc.addFile(url)
+sqlContext = SQLContext(sc)
+df = sqlContext.read.csv(SparkFiles.get("airports.dat"), header=False, inferSchema= True) 
+
+new_col_names = ['ID', 'Name', 'City', 'Country','IATA', 'ICAO', 'Lat', 'Long', 'Alt', 'Timezone', 'DST', 'Tz database time zone', 'type', 'source']
+df = df.toDF(*new_col_names)
+
+from pyspark.sql.functions import col
+import pyspark.sql.functions as F
+from pyspark.sql import SparkSession
+
+def airports_by_country():
+    area = input("Please enter a country:")
+    
+    country_of_area = df.filter(col("Country") == area)
+    data_output = list(country_of_area.select('Name').toPandas()['Name'])
+    data_output1 = list(country_of_area.select('City').toPandas()['City'])
+    
+    print("The following airports are in", area, ":")
+    print(data_output)
+    print("\n")
+    print("The following airports in", area, " are in their respective city", ":")
+    print(data_output1)
+    
+airports_by_country()
