@@ -125,3 +125,23 @@ def find_popular_airports():
     for i, j in zip(cities, flights):
         print(i,":",j)
     ##############################################################################################################################################################
+#prints info on airports in given city
+def print_info():
+    city= input("Enter City to output airport(s) info: ")
+    
+    airports = df.filter(col("City") == city)
+    codes = list(airports.select('IATA').toPandas()['IATA'])
+    names = list(airports.select('Name').toPandas()['Name'])
+    country = list(airports.select('Country').toPandas()['Country'])
+    timezone = list(airports.select('Timezone').toPandas()['Timezone'])
+    lat = list(airports.select('Lat').toPandas()['Lat'])
+    long = list(airports.select('Long').toPandas()['Long'])
+    
+    for x in range(len(airports)):
+        print("\n", names[x])
+        print("\nCity:", airports[x])
+        print("\nCountry:", country[x])
+        print("\nIATA:", codes[x])
+        print("\nTimezone:", timezone[x])
+        print("\nLatitude:", lat[x])
+        print("\nLongitude:", long[x])
