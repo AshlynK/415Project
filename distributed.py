@@ -22,7 +22,7 @@ df = df.toDF(*new_col_names)
 
 
 #Routes
-url2 = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat"
+url2 = "https://raw.githubusercontent.com/AshlynK/415Project/main/routes.csv"
 sc.addFile(url2)
 sqlContext2 = SQLContext(sc)
 
@@ -33,7 +33,7 @@ df2 = df2.toDF(*new_col_names2)
 
 
 #Airlines
-url3 = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat"
+url3 = "https://raw.githubusercontent.com/AshlynK/415Project/main/airlines.csv"
 sc.addFile(url3)
 sqlContext3 = SQLContext(sc)
 
