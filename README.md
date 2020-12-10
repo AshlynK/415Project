@@ -4,7 +4,7 @@ The code provided compiles and runs in Jupyter Notebook. If you do not have jupy
 
 https://jupyter.readthedocs.io/en/latest/install.html
 
-In addition, you will also need the correct version of Apache Spark/Pyspark to run the ditributed data. If you have a Mac, I would suggest looking at:
+In addition, you will also need the correct version of Apache Spark/Pyspark to run the distributed data. If you have a Mac, I would suggest looking at:
 
 https://medium.com/@roshinijohri/spark-with-jupyter-notebook-on-macos-2-0-0-and-higher-c61b971b5007
 
